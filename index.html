@@ -1,0 +1,1355 @@
+<!doctype html>
+<!--
+  Mealio_Bite Bliss — landing page.
+
+  Deliberately kept as one file: markup, styles and scripts all live here, so
+  there's nothing to build and nothing to install. Drop it on any static host
+  and it works. Images are shared with the React app in src/assets, so serve
+  this from the project root (or copy that folder along) and they just load.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Mealio_Bite Bliss — Halal Pakistani Food &amp; Seafood, Delivered</title>
+  <meta name="description" content="Order halal Pakistani favourites from Mealio_Bite Bliss — biryani, karahi, nihari, seekh kebab, Karachi seafood and zinger burgers. Delivered hot in 30 minutes.">
+  <meta name="author" content="Mealio_Bite Bliss">
+
+  <meta property="og:title" content="Mealio_Bite Bliss — Halal Pakistani Food &amp; Seafood, Delivered">
+  <meta property="og:description" content="Biryani, karahi, nihari, masala fish and zinger burgers — delivered hot in 30 minutes from Mealio_Bite Bliss.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600;700&display=swap">
+
+  <style>
+  /* ---------------------------------------------------------------------------
+     design tokens — same values as src/styles.css so both versions match
+  --------------------------------------------------------------------------- */
+  :root {
+    --radius: 0.875rem;
+    --background: oklch(0.995 0.003 240);
+    --foreground: oklch(0.18 0.06 260);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.18 0.06 260);
+    --primary: oklch(0.24 0.09 262);
+    --primary-foreground: oklch(0.99 0.005 240);
+    --primary-glow: oklch(0.42 0.16 262);
+    --secondary: oklch(0.97 0.012 250);
+    --secondary-foreground: oklch(0.22 0.08 262);
+    --muted: oklch(0.965 0.01 250);
+    --muted-foreground: oklch(0.5 0.04 258);
+    --border: oklch(0.92 0.015 250);
+    --gradient-hero: linear-gradient(135deg, oklch(0.24 0.09 262) 0%, oklch(0.14 0.08 262) 100%);
+    --gradient-soft: linear-gradient(180deg, oklch(0.99 0.005 240) 0%, oklch(0.96 0.02 250) 100%);
+    --shadow-elegant: 0 20px 60px -20px color-mix(in oklab, oklch(0.24 0.09 262) 30%, transparent);
+    --shadow-card: 0 4px 24px -8px color-mix(in oklab, oklch(0.24 0.09 262) 18%, transparent);
+    --font-display: "Fraunces", ui-serif, Georgia, serif;
+    --font-brand: "Playfair Display", ui-serif, Georgia, serif;
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* base */
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  h1, h2, h3, h4, p, ul { margin: 0; }
+  ul { padding: 0; list-style: none; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  input, button { font: inherit; color: inherit; }
+  button { background: none; border: 0; padding: 0; cursor: pointer; }
+  body.locked { overflow: hidden; }
+
+  /* shared bits */
+  .wrap { max-width: 80rem; margin-inline: auto; padding-inline: 1.5rem; }
+  .wrap-narrow { max-width: 64rem; margin-inline: auto; padding-inline: 1.5rem; }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--primary-glow);
+  }
+  .section-title {
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  @media (min-width: 48rem) {
+    .section-title { font-size: 3rem; }
+  }
+
+  .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; }
+  .head-link {
+    display: none;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--primary);
+  }
+  .head-link:hover { color: var(--primary-glow); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  .btn:hover { background: var(--primary-glow); }
+  .btn-md { padding: 0.5rem 1.25rem; font-size: 0.875rem; }
+  .btn-sm { padding: 0.375rem 1rem; font-size: 0.75rem; }
+  .btn-lg { border-radius: 0.75rem; padding: 0.75rem 1.5rem; font-size: 0.875rem; }
+  .btn-block { width: 100%; border-radius: 0.75rem; padding: 0.75rem 1rem; font-size: 0.875rem; }
+
+  /* lucide outlines, inlined so the page has no icon dependency */
+  .ic { display: block; width: 1rem; height: 1rem; flex: none; }
+  .ic.i12 { width: 0.75rem; height: 0.75rem; }
+  .ic.i14 { width: 0.875rem; height: 0.875rem; }
+  .ic.i20 { width: 1.25rem; height: 1.25rem; }
+  .ic.i24 { width: 1.5rem; height: 1.5rem; }
+  .fill { fill: currentColor; }
+
+  /* ---------------------------------------------------------------------------
+     header
+  --------------------------------------------------------------------------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--background) 80%, transparent);
+    backdrop-filter: blur(24px);
+  }
+  .site-header .bar { display: flex; height: 4rem; align-items: center; justify-content: space-between; }
+
+  .brand { display: flex; flex-direction: column; align-items: flex-start; }
+  .brand--center { align-items: center; }
+  .brand-name {
+    font-family: var(--font-brand);
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+  .brand-name b { color: #d97706; font-style: normal; }
+  .brand-sub {
+    margin-top: 0.25rem;
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    line-height: 1;
+    color: var(--muted-foreground);
+  }
+
+  .main-nav { display: none; align-items: center; gap: 2rem; font-size: 0.875rem; font-weight: 500; color: var(--muted-foreground); }
+  .main-nav a:hover { color: var(--foreground); }
+  .header-actions { display: flex; align-items: center; gap: 0.75rem; }
+  .signin-link { display: none; font-size: 0.875rem; font-weight: 500; }
+  .signin-link:hover { color: var(--primary); }
+
+  @media (min-width: 48rem) {
+    .main-nav { display: flex; }
+    .signin-link { display: inline; }
+  }
+
+  /* ---------------------------------------------------------------------------
+     hero
+  --------------------------------------------------------------------------- */
+  .hero { position: relative; overflow: hidden; }
+  .hero .wrap { display: grid; align-items: center; gap: 3rem; padding-top: 4rem; padding-bottom: 6rem; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--secondary);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--secondary-foreground);
+  }
+  .hero-badge .dot { width: 0.375rem; height: 0.375rem; border-radius: 999px; background: var(--primary-glow); }
+
+  .hero h1 {
+    margin-top: 1.5rem;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+  }
+  .hero h1 em { color: var(--primary); }
+  .hero-lede { margin-top: 1.5rem; max-width: 32rem; font-size: 1.125rem; line-height: 1.6; color: var(--muted-foreground); }
+
+  .address-form {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 36rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--card);
+    padding: 0.5rem;
+    box-shadow: var(--shadow-card);
+  }
+  .address-field { display: flex; flex: 1; align-items: center; gap: 0.5rem; padding-inline: 0.75rem; }
+  .address-field .ic { color: var(--primary); }
+  .address-field .ic use { stroke-width: 2.25; }
+  .address-field input { width: 100%; padding-block: 0.75rem; background: transparent; border: 0; outline: none; font-size: 0.875rem; }
+  .address-field input::placeholder { color: var(--muted-foreground); }
+
+  .hero-stats { margin-top: 2.5rem; display: flex; flex-wrap: wrap; align-items: center; column-gap: 2rem; row-gap: 1rem; }
+  .stat-value { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; }
+  .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); }
+  .vrule { display: none; width: 1px; height: 2rem; background: var(--border); }
+
+  .hero-media { position: relative; }
+  .hero-media::before {
+    content: "";
+    position: absolute;
+    inset: -1.5rem;
+    z-index: -1;
+    border-radius: 2rem;
+    background: var(--gradient-soft);
+  }
+  .hero-media .frame { position: relative; overflow: hidden; border-radius: 2rem; box-shadow: var(--shadow-elegant); }
+  .hero-media img { width: 100%; height: 100%; object-fit: cover; }
+
+  .float-card {
+    position: absolute;
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--card) 95%, transparent);
+    padding: 0.75rem;
+    padding-right: 1rem;
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(8px);
+  }
+  .float-card .badge-ic {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .float-title { font-size: 0.875rem; font-weight: 600; }
+  .float-sub { font-size: 0.75rem; color: var(--muted-foreground); }
+  .float-card--onway { left: -1.5rem; top: 2.5rem; }
+  .float-card--rating { right: -1rem; bottom: 2.5rem; }
+
+  @media (min-width: 40rem) {
+    .address-form { flex-direction: row; }
+  }
+  @media (min-width: 48rem) {
+    .hero .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 6rem; padding-bottom: 8rem; }
+    .hero h1 { font-size: 4.5rem; line-height: 1; }
+    .vrule { display: block; }
+    .float-card { display: flex; }
+  }
+
+  /* ---------------------------------------------------------------------------
+     categories
+  --------------------------------------------------------------------------- */
+  .cats { border-top: 1px solid var(--border); background: var(--gradient-soft); }
+  .cats .wrap { padding-block: 5rem; }
+
+  .cat-grid { margin-top: 3rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  .cat-card {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--card);
+    padding: 1rem;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .cat-card:hover { transform: translateY(-0.25rem); border-color: var(--primary); }
+  .cat-card .thumb {
+    display: block;
+    margin-inline: auto;
+    aspect-ratio: 1;
+    width: 6rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--muted);
+  }
+  .cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .cat-card:hover img { transform: scale(1.1); }
+  .cat-card .name { display: block; margin-top: 0.75rem; font-size: 0.875rem; font-weight: 600; }
+
+  @media (min-width: 40rem) { .cat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 48rem) {
+    .cat-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .head-link { display: inline-flex; }
+  }
+
+  /* ---------------------------------------------------------------------------
+     restaurants
+  --------------------------------------------------------------------------- */
+  .restaurants .wrap { padding-block: 6rem; }
+  .rest-grid { margin-top: 3rem; display: grid; gap: 2rem; }
+
+  .rest-card {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--card);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .rest-card:hover { transform: translateY(-0.25rem); box-shadow: var(--shadow-elegant); }
+
+  .rest-photo { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+  .rest-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .rest-card:hover .rest-photo img { transform: scale(1.05); }
+
+  .rest-tag {
+    position: absolute;
+    left: 0.75rem;
+    top: 0.75rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--card) 95%, transparent);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary);
+    backdrop-filter: blur(8px);
+  }
+
+  .rest-body { padding: 1.25rem; }
+  .rest-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
+  .rest-top h3 { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; }
+  .rating-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 0.375rem;
+    background: var(--primary);
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-foreground);
+  }
+  .rest-cuisine { margin-top: 0.25rem; font-size: 0.875rem; color: var(--muted-foreground); }
+  .rest-meta {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+  .rest-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+  .rest-meta .price { margin-left: auto; font-weight: 500; color: var(--foreground); }
+
+  @media (min-width: 48rem) { .rest-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .rest-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  /* ---------------------------------------------------------------------------
+     trending dishes (dark band)
+  --------------------------------------------------------------------------- */
+  .trending {
+    border-top: 1px solid var(--border);
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .trending .wrap { padding-block: 6rem; }
+  .trending .eyebrow { color: color-mix(in srgb, var(--primary-foreground) 60%, transparent); }
+
+  .trend-grid { margin-top: 3rem; display: grid; gap: 1.5rem; }
+  .dish-card {
+    overflow: hidden;
+    border-radius: 1rem;
+    background: var(--card);
+    color: var(--card-foreground);
+    transition: transform 0.3s;
+  }
+  .dish-card:hover { transform: translateY(-0.25rem); }
+  .dish-photo { aspect-ratio: 1; overflow: hidden; }
+  .dish-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .dish-card:hover .dish-photo img { transform: scale(1.1); }
+  .dish-body { padding: 1.25rem; }
+  .dish-body h3 { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; }
+  .dish-rest { margin-top: 0.25rem; font-size: 0.875rem; color: var(--muted-foreground); }
+  .dish-row { margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; }
+  .dish-price { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: var(--primary); }
+
+  @media (min-width: 40rem) { .trend-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .trend-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  /* ---------------------------------------------------------------------------
+     full menu
+  --------------------------------------------------------------------------- */
+  .menu .wrap-narrow { padding-block: 6rem; }
+  .menu-head { text-align: center; }
+  .menu-sub { margin: 1rem auto 0; max-width: 36rem; color: var(--muted-foreground); }
+
+  .menu-groups { margin-top: 3.5rem; display: grid; gap: 3.5rem; }
+  .menu-group-head { display: flex; align-items: center; gap: 1rem; }
+  .menu-group-head h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; }
+  .menu-group-head .rule { height: 1px; flex: 1; background: var(--border); }
+
+  .menu-list {
+    margin-top: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--card);
+    box-shadow: var(--shadow-card);
+  }
+  .menu-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; transition: background-color 0.2s; }
+  .menu-item:hover { background: color-mix(in srgb, var(--secondary) 60%, transparent); }
+  .menu-item + .menu-item { border-top: 1px solid var(--border); }
+  .menu-item img { flex: none; width: 5rem; height: 5rem; border-radius: 0.75rem; object-fit: cover; }
+  .menu-info { flex: 1; min-width: 0; }
+  .menu-info h4 { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; }
+  .menu-info p { margin-top: 0.25rem; font-size: 0.875rem; color: var(--muted-foreground); }
+  .menu-side { display: flex; flex: none; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+  .menu-side .price { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; color: var(--primary); }
+
+  @media (min-width: 40rem) {
+    .menu-item { gap: 1.25rem; padding: 1.25rem; }
+    .menu-item img { width: 6rem; height: 6rem; }
+  }
+
+  /* ---------------------------------------------------------------------------
+     how it works
+  --------------------------------------------------------------------------- */
+  .how .wrap { padding-block: 6rem; }
+  .how-head { text-align: center; }
+  .how-head .section-title { max-width: 42rem; margin-inline: auto; }
+
+  .steps { margin-top: 4rem; display: grid; gap: 2rem; }
+  .step {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--card);
+    padding: 2rem;
+    box-shadow: var(--shadow-card);
+  }
+  .step-num {
+    position: absolute;
+    top: -1rem;
+    left: 2rem;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    background: var(--primary);
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--primary-foreground);
+  }
+  .step-icon { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 0.75rem; background: var(--secondary); color: var(--primary); }
+  .step h3 { margin-top: 1.25rem; font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; }
+  .step p { margin-top: 0.5rem; font-size: 0.875rem; line-height: 1.625; color: var(--muted-foreground); }
+
+  .promises {
+    margin-top: 4rem;
+    display: grid;
+    gap: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--gradient-soft);
+    padding: 2rem;
+  }
+  .promise { display: flex; align-items: flex-start; gap: 1rem; }
+  .promise-icon { display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: var(--primary); color: var(--primary-foreground); }
+  .promise h4 { font-weight: 600; }
+  .promise p { font-size: 0.875rem; color: var(--muted-foreground); }
+
+  @media (min-width: 48rem) {
+    .steps, .promises { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  /* ---------------------------------------------------------------------------
+     app promo
+  --------------------------------------------------------------------------- */
+  .app-promo .wrap { padding-bottom: 6rem; }
+  .app-shell {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: var(--gradient-hero);
+    padding: 2.5rem;
+    color: var(--primary-foreground);
+  }
+  .glow { position: absolute; border-radius: 999px; filter: blur(64px); }
+  .glow-a { right: -6rem; top: -6rem; width: 18rem; height: 18rem; background: color-mix(in srgb, var(--primary-glow) 30%, transparent); }
+  .glow-b { bottom: -8rem; left: -4rem; width: 18rem; height: 18rem; background: color-mix(in srgb, var(--primary-glow) 20%, transparent); }
+
+  .app-grid { position: relative; display: grid; align-items: center; gap: 2.5rem; }
+  .app-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--primary-foreground) 20%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--primary-foreground) 10%, transparent);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .app-shell h2 { margin-top: 1.25rem; font-family: var(--font-display); font-size: 2.25rem; font-weight: 600; letter-spacing: -0.025em; }
+  .app-copy { margin-top: 1rem; max-width: 28rem; color: color-mix(in srgb, var(--primary-foreground) 75%, transparent); }
+  .store-row { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .store-btn {
+    border: 1px solid color-mix(in srgb, var(--primary-foreground) 30%, transparent);
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--primary-foreground) 10%, transparent);
+    padding: 0.75rem 1.25rem;
+    text-align: left;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .store-btn small { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7; }
+  .store-btn strong { font-family: var(--font-display); font-size: 1rem; font-weight: 600; }
+  .store-btn:hover { background: var(--primary-foreground); color: var(--primary); }
+
+  .phone { display: none; position: relative; justify-content: center; }
+  .phone .frame {
+    border-radius: 2.5rem;
+    border: 8px solid color-mix(in srgb, var(--primary-foreground) 10%, transparent);
+    background: var(--card);
+    padding: 0.5rem;
+    box-shadow: var(--shadow-elegant);
+  }
+  .phone img { display: block; height: 420px; width: 320px; border-radius: 2rem; object-fit: cover; }
+
+  @media (min-width: 48rem) {
+    .app-shell { padding: 4rem; }
+    .app-shell h2 { font-size: 3rem; }
+    .app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .phone { display: flex; }
+  }
+
+  /* ---------------------------------------------------------------------------
+     footer
+  --------------------------------------------------------------------------- */
+  .site-footer { border-top: 1px solid var(--border); background: var(--secondary); }
+  .footer-grid { max-width: 80rem; margin-inline: auto; display: grid; gap: 3rem; padding: 4rem 1.5rem; }
+  .footer-brand p { margin-top: 1rem; max-width: 24rem; font-size: 0.875rem; color: var(--muted-foreground); }
+  .footer-brand .btn { margin-top: 1.25rem; }
+  .footer-col h4 { font-family: var(--font-display); font-size: 0.875rem; font-weight: 600; color: var(--foreground); }
+  .footer-col ul { margin-top: 1rem; display: grid; gap: 0.5rem; font-size: 0.875rem; color: var(--muted-foreground); }
+  .footer-col a:hover { color: var(--primary); }
+  .footer-bottom { border-top: 1px solid var(--border); }
+  .footer-bottom .inner {
+    max-width: 80rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  @media (min-width: 48rem) {
+    .footer-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .footer-brand { grid-column: span 2; }
+    .footer-bottom .inner { flex-direction: row; }
+  }
+
+  /* floating WhatsApp button + sign-in dialog */
+  .wa-fab {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    background: var(--primary);
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary-foreground);
+    box-shadow: var(--shadow-elegant);
+    transition: background-color 0.2s;
+  }
+  .wa-fab:hover { background: var(--primary-glow); }
+  .wa-fab span { display: none; }
+  @media (min-width: 40rem) { .wa-fab span { display: inline; } }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: color-mix(in srgb, var(--foreground) 50%, transparent);
+    backdrop-filter: blur(4px);
+  }
+  .overlay[hidden] { display: none; }
+  .modal {
+    width: 100%;
+    max-width: 24rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--card);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-elegant);
+  }
+  .modal-head { display: flex; align-items: flex-start; justify-content: space-between; }
+  .modal-head h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; }
+  .modal-head p { margin-top: 0.25rem; font-size: 0.875rem; color: var(--muted-foreground); }
+  .modal-close { border-radius: 0.5rem; padding: 0.25rem; color: var(--muted-foreground); }
+  .modal-close:hover { color: var(--foreground); }
+  .modal form { margin-top: 1.5rem; display: grid; gap: 0.75rem; }
+  .modal input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--background);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    outline: none;
+  }
+  .modal input:focus { border-color: var(--primary); }
+  .modal-foot { margin-top: 1rem; text-align: center; font-size: 0.75rem; color: var(--muted-foreground); }
+  .modal-foot a { font-weight: 600; color: var(--primary); }
+  .modal-foot a:hover { text-decoration: underline; }
+  </style>
+</head>
+
+<body>
+
+<!-- icons (lucide paths, inlined) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-star-fill" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="i-bike" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="#" class="brand">
+      <span class="brand-name">Mealio<b>.</b></span>
+      <span class="brand-sub">Bite Bliss</span>
+    </a>
+    <nav class="main-nav" aria-label="Main">
+      <a href="#restaurants">Restaurants</a>
+      <a href="#categories">Cuisines</a>
+      <a href="#menu">Menu</a>
+      <a href="#how">How it works</a>
+    </nav>
+    <div class="header-actions">
+      <button type="button" class="signin-link" data-signin>Sign in</button>
+      <a class="btn btn-md" href="https://wa.me/923001234567?text=Hi!%20I'd%20like%20to%20place%20an%20order%20from%20Mealio_Bite%20Bliss." target="_blank" rel="noopener noreferrer">
+        <svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>
+        Order now
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="hero-badge"><span class="dot"></span>100% Halal · Karachi, Lahore &amp; Islamabad</p>
+        <h1>Authentic Pakistani <em>flavor</em>, delivered in 30 minutes.</h1>
+        <p class="hero-lede">
+          Sindhi biryani, chicken karahi, Lahori nihari, charcoal seekh kebab, Karachi masala fish
+          and hot zinger burgers — all halal, all fresh, straight to your door.
+        </p>
+
+        <form class="address-form">
+          <div class="address-field">
+            <svg class="ic i20" aria-hidden="true"><use href="#i-pin"/></svg>
+            <input type="text" placeholder="Enter your delivery address" aria-label="Delivery address">
+          </div>
+          <a class="btn btn-lg" href="https://wa.me/923001234567?text=Hi!%20Please%20share%20the%20menu%20%E2%80%94%20I%20want%20to%20order%20from%20Mealio_Bite%20Bliss." target="_blank" rel="noopener noreferrer">
+            <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+            Find food
+          </a>
+        </form>
+
+        <div class="hero-stats">
+          <div>
+            <div class="stat-value">120+</div>
+            <div class="stat-label">Halal kitchens</div>
+          </div>
+          <span class="vrule"></span>
+          <div>
+            <div class="stat-value">30 min</div>
+            <div class="stat-label">Average delivery</div>
+          </div>
+          <span class="vrule"></span>
+          <div>
+            <div class="stat-value">4.9★</div>
+            <div class="stat-label">Customer rating</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <div class="frame">
+          <img src="src/assets/pk-hero.jpg" alt="Pakistani halal feast with biryani, karahi, seekh kebab and naan" width="1600" height="1200">
+        </div>
+
+        <div class="float-card float-card--onway">
+          <span class="badge-ic"><svg class="ic i20" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <div>
+            <div class="float-title">On the way</div>
+            <div class="float-sub">Arrives in 12 min</div>
+          </div>
+        </div>
+        <div class="float-card float-card--rating">
+          <span class="badge-ic"><svg class="ic i20 fill" aria-hidden="true"><use href="#i-star-fill"/></svg></span>
+          <div>
+            <div class="float-title">4.9 · 12k reviews</div>
+            <div class="float-sub">Karachi Darbar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cats" id="categories">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Browse by cuisine</p>
+          <h2 class="section-title">What are you craving?</h2>
+        </div>
+        <a href="#menu" class="head-link">Full menu <svg class="ic i14" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+
+      <div class="cat-grid">
+        <a class="cat-card" href="#menu">
+          <span class="thumb"><img src="src/assets/pk-biryani.jpg" alt="Biryani" width="400" height="400" loading="lazy"></span>
+          <span class="name">Biryani</span>
+        </a>
+        <a class="cat-card" href="#menu">
+          <span class="thumb"><img src="src/assets/pk-karahi.jpg" alt="Karahi" width="400" height="400" loading="lazy"></span>
+          <span class="name">Karahi</span>
+        </a>
+        <a class="cat-card" href="#menu">
+          <span class="thumb"><img src="src/assets/pk-seekh.jpg" alt="BBQ &amp; Kebab" width="400" height="400" loading="lazy"></span>
+          <span class="name">BBQ &amp; Kebab</span>
+        </a>
+        <a class="cat-card" href="#menu">
+          <span class="thumb"><img src="src/assets/pk-fish.jpg" alt="Seafood" width="400" height="400" loading="lazy"></span>
+          <span class="name">Seafood</span>
+        </a>
+        <a class="cat-card" href="#menu">
+          <span class="thumb"><img src="src/assets/pk-zinger.jpg" alt="Fast Food" width="400" height="400" loading="lazy"></span>
+          <span class="name">Fast Food</span>
+        </a>
+        <a class="cat-card" href="#menu">
+          <span class="thumb"><img src="src/assets/pk-dessert.jpg" alt="Mithai" width="400" height="400" loading="lazy"></span>
+          <span class="name">Mithai</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="restaurants" id="restaurants">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Featured</p>
+          <h2 class="section-title">Top halal restaurants near you</h2>
+        </div>
+        <a href="#menu" class="head-link">See all <svg class="ic i14" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+
+      <div class="rest-grid">
+        <article class="rest-card">
+          <div class="rest-photo">
+            <img src="src/assets/rest-2.jpg" alt="Karachi Darbar" width="1000" height="700" loading="lazy">
+            <span class="rest-tag">100% Halal</span>
+          </div>
+          <div class="rest-body">
+            <div class="rest-top">
+              <h3>Karachi Darbar</h3>
+              <span class="rating-chip"><svg class="ic i12 fill" aria-hidden="true"><use href="#i-star-fill"/></svg> 4.8</span>
+            </div>
+            <p class="rest-cuisine">Biryani · Karahi · Desi</p>
+            <div class="rest-meta">
+              <span><svg class="ic i14" aria-hidden="true"><use href="#i-clock"/></svg> 20–30 min</span>
+              <span><svg class="ic i14" aria-hidden="true"><use href="#i-bike"/></svg> Free</span>
+              <span class="price">Rs 700</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="rest-card">
+          <div class="rest-photo">
+            <img src="src/assets/rest-3.jpg" alt="Do Darya Seafood" width="1000" height="700" loading="lazy">
+            <span class="rest-tag">Top rated</span>
+          </div>
+          <div class="rest-body">
+            <div class="rest-top">
+              <h3>Do Darya Seafood</h3>
+              <span class="rating-chip"><svg class="ic i12 fill" aria-hidden="true"><use href="#i-star-fill"/></svg> 4.9</span>
+            </div>
+            <p class="rest-cuisine">Karachi Seafood · Grill</p>
+            <div class="rest-meta">
+              <span><svg class="ic i14" aria-hidden="true"><use href="#i-clock"/></svg> 25–35 min</span>
+              <span><svg class="ic i14" aria-hidden="true"><use href="#i-bike"/></svg> Free</span>
+              <span class="price">Rs 1,400</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="rest-card">
+          <div class="rest-photo">
+            <img src="src/assets/rest-4.jpg" alt="Lahori Nihari House" width="1000" height="700" loading="lazy">
+            <span class="rest-tag">Famous</span>
+          </div>
+          <div class="rest-body">
+            <div class="rest-top">
+              <h3>Lahori Nihari House</h3>
+              <span class="rating-chip"><svg class="ic i12 fill" aria-hidden="true"><use href="#i-star-fill"/></svg> 4.7</span>
+            </div>
+            <p class="rest-cuisine">Nihari · Paye · Naan</p>
+            <div class="rest-meta">
+              <span><svg class="ic i14" aria-hidden="true"><use href="#i-clock"/></svg> 15–25 min</span>
+              <span><svg class="ic i14" aria-hidden="true"><use href="#i-bike"/></svg> Free</span>
+              <span class="price">Rs 600</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="rest-card">
+          <div class="rest-photo">
+            <img src="src/assets/rest-1.jpg" alt="Zinger Junction" width="1000" height="700" loading="lazy">
+            <span class="rest-tag">Fast food</span>
+          </div>
+          <div class="rest-body">
+            <div class="rest-top">
+              <h3>Zinger Junction</h3>
+              <span class="rating-chip"><svg class="ic i12 fill" aria-hidden="true"><use href="#i-star-fill"/></svg> 4.6</span>
+            </div>
+            <p class="rest-cuisine">Burgers · Shawarma · Fries</p>
+            <div class="rest-meta">
+              <span><svg class="ic i14" aria-hidden="true"><use href="#i-clock"/></svg> 20–30 min</span>
+              <span><svg class="ic i14" aria-hidden="true"><use href="#i-bike"/></svg> Free</span>
+              <span class="price">Rs 450</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="trending">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Trending tonight</p>
+        <h2 class="section-title">Most ordered this week</h2>
+      </div>
+
+      <div class="trend-grid">
+        <article class="dish-card">
+          <div class="dish-photo"><img src="src/assets/pk-biryani.jpg" alt="Sindhi Chicken Biryani" width="800" height="800" loading="lazy"></div>
+          <div class="dish-body">
+            <h3>Sindhi Chicken Biryani</h3>
+            <p class="dish-rest">Karachi Darbar</p>
+            <div class="dish-row">
+              <span class="dish-price">Rs 550</span>
+              <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20I%20want%20to%20order%3A%20Sindhi%20Chicken%20Biryani%20(Rs%20550)%20from%20Karachi%20Darbar." target="_blank" rel="noopener noreferrer">Order +</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="dish-card">
+          <div class="dish-photo"><img src="src/assets/pk-karahi.jpg" alt="Chicken Karahi (Full)" width="800" height="800" loading="lazy"></div>
+          <div class="dish-body">
+            <h3>Chicken Karahi (Full)</h3>
+            <p class="dish-rest">Karachi Darbar</p>
+            <div class="dish-row">
+              <span class="dish-price">Rs 1,850</span>
+              <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20I%20want%20to%20order%3A%20Chicken%20Karahi%20(Full)%20(Rs%201%2C850)%20from%20Karachi%20Darbar." target="_blank" rel="noopener noreferrer">Order +</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="dish-card">
+          <div class="dish-photo"><img src="src/assets/pk-fish.jpg" alt="Masala Fried Rahu Fish" width="800" height="800" loading="lazy"></div>
+          <div class="dish-body">
+            <h3>Masala Fried Rahu Fish</h3>
+            <p class="dish-rest">Do Darya Seafood</p>
+            <div class="dish-row">
+              <span class="dish-price">Rs 1,200</span>
+              <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20I%20want%20to%20order%3A%20Masala%20Fried%20Rahu%20Fish%20(Rs%201%2C200)%20from%20Do%20Darya%20Seafood." target="_blank" rel="noopener noreferrer">Order +</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="dish-card">
+          <div class="dish-photo"><img src="src/assets/pk-zinger.jpg" alt="Zinger Burger + Fries" width="800" height="800" loading="lazy"></div>
+          <div class="dish-body">
+            <h3>Zinger Burger + Fries</h3>
+            <p class="dish-rest">Zinger Junction</p>
+            <div class="dish-row">
+              <span class="dish-price">Rs 590</span>
+              <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20I%20want%20to%20order%3A%20Zinger%20Burger%20%2B%20Fries%20(Rs%20590)%20from%20Zinger%20Junction." target="_blank" rel="noopener noreferrer">Order +</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="menu" id="menu">
+    <div class="wrap-narrow">
+      <div class="menu-head">
+        <p class="eyebrow">Our menu</p>
+        <h2 class="section-title">Our full menu</h2>
+        <p class="menu-sub">Every dish is 100% halal, cooked fresh to order. Tap any item to send it straight to our WhatsApp.</p>
+      </div>
+
+      <div class="menu-groups">
+        <div class="menu-group">
+          <div class="menu-group-head">
+            <h3>Desi Handi &amp; Rice</h3>
+            <span class="rule"></span>
+          </div>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <img src="src/assets/pk-biryani.jpg" alt="Sindhi Chicken Biryani" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Sindhi Chicken Biryani</h4>
+                <p>Aromatic basmati, aloo, kachumber raita</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 550</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Sindhi%20Chicken%20Biryani%20%E2%80%94%20Rs%20550.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+            <li class="menu-item">
+              <img src="src/assets/pk-karahi.jpg" alt="Chicken Karahi" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Chicken Karahi</h4>
+                <p>Tomato, green chilli, fresh ginger — served in karahi</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 1,850</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Chicken%20Karahi%20%E2%80%94%20Rs%201%2C850.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+            <li class="menu-item">
+              <img src="src/assets/pk-nihari.jpg" alt="Lahori Beef Nihari" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Lahori Beef Nihari</h4>
+                <p>Slow-cooked overnight, ginger julienne &amp; naan</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 780</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Lahori%20Beef%20Nihari%20%E2%80%94%20Rs%20780.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="menu-group">
+          <div class="menu-group-head">
+            <h3>Charcoal BBQ</h3>
+            <span class="rule"></span>
+          </div>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <img src="src/assets/pk-seekh.jpg" alt="Chicken Seekh Kebab" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Chicken Seekh Kebab</h4>
+                <p>6 pcs, hara masala, imli chutney</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 690</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Chicken%20Seekh%20Kebab%20%E2%80%94%20Rs%20690.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+            <li class="menu-item">
+              <img src="src/assets/pk-seekh.jpg" alt="Malai Boti Platter" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Malai Boti Platter</h4>
+                <p>Creamy marinated boti with roghni naan</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 950</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Malai%20Boti%20Platter%20%E2%80%94%20Rs%20950.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="menu-group">
+          <div class="menu-group-head">
+            <h3>Karachi Seafood (Halal)</h3>
+            <span class="rule"></span>
+          </div>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <img src="src/assets/pk-fish.jpg" alt="Masala Fried Rahu Fish" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Masala Fried Rahu Fish</h4>
+                <p>Karachi style, lemon &amp; green chutney</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 1,200</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Masala%20Fried%20Rahu%20Fish%20%E2%80%94%20Rs%201%2C200.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+            <li class="menu-item">
+              <img src="src/assets/pk-prawns.jpg" alt="Jhinga Masala Prawns" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Jhinga Masala Prawns</h4>
+                <p>Butter garlic masala prawns, coriander</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 1,450</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Jhinga%20Masala%20Prawns%20%E2%80%94%20Rs%201%2C450.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+            <li class="menu-item">
+              <img src="src/assets/pk-fish.jpg" alt="Grilled Surmai Steak" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Grilled Surmai Steak</h4>
+                <p>King fish steak with garlic rice</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 1,650</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Grilled%20Surmai%20Steak%20%E2%80%94%20Rs%201%2C650.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="menu-group">
+          <div class="menu-group-head">
+            <h3>Fast Food</h3>
+            <span class="rule"></span>
+          </div>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <img src="src/assets/pk-zinger.jpg" alt="Zinger Burger" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Zinger Burger</h4>
+                <p>Crispy fillet, cheese, mayo garlic, fries</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 590</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Zinger%20Burger%20%E2%80%94%20Rs%20590.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+            <li class="menu-item">
+              <img src="src/assets/pk-shawarma.jpg" alt="Chicken Shawarma Roll" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Chicken Shawarma Roll</h4>
+                <p>Tahini garlic sauce, pickles, paratha wrap</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 350</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Chicken%20Shawarma%20Roll%20%E2%80%94%20Rs%20350.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="menu-group">
+          <div class="menu-group-head">
+            <h3>Mithai &amp; Sweets</h3>
+            <span class="rule"></span>
+          </div>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <img src="src/assets/pk-dessert.jpg" alt="Gulab Jamun &amp; Kheer" width="800" height="800" loading="lazy">
+              <div class="menu-info">
+                <h4>Gulab Jamun &amp; Kheer</h4>
+                <p>Warm gulab jamun with chilled rice kheer</p>
+              </div>
+              <div class="menu-side">
+                <span class="price">Rs 320</span>
+                <a class="btn btn-sm" href="https://wa.me/923001234567?text=Assalam%20o%20Alaikum!%20Order%3A%20Gulab%20Jamun%20%26%20Kheer%20%E2%80%94%20Rs%20320.%20Please%20confirm." target="_blank" rel="noopener noreferrer">
+                  <svg class="ic i14" aria-hidden="true"><use href="#i-chat"/></svg> Order
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <div class="how-head">
+        <p class="eyebrow">How it works</p>
+        <h2 class="section-title">From craving to doorstep in three steps.</h2>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <div class="step-icon"><svg class="ic i24" aria-hidden="true"><use href="#i-pin"/></svg></div>
+          <h3>Set your address</h3>
+          <p>Karachi, Lahore, Islamabad or Rawalpindi — we'll show kitchens that deliver to you.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <div class="step-icon"><svg class="ic i24" aria-hidden="true"><use href="#i-search"/></svg></div>
+          <h3>Pick your dish</h3>
+          <p>Biryani, karahi, BBQ, seafood or fast food — choose and customise the spice level.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <div class="step-icon"><svg class="ic i24" aria-hidden="true"><use href="#i-bike"/></svg></div>
+          <h3>Piping hot delivery</h3>
+          <p>Track your rider live. Most orders reach you in under 30 minutes.</p>
+        </div>
+      </div>
+
+      <div class="promises">
+        <div class="promise">
+          <span class="promise-icon"><svg class="ic i20" aria-hidden="true"><use href="#i-shield"/></svg></span>
+          <div>
+            <h4>100% Halal certified</h4>
+            <p>Every kitchen and every cut verified halal.</p>
+          </div>
+        </div>
+        <div class="promise">
+          <span class="promise-icon"><svg class="ic i20" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <div>
+            <h4>On time, every time</h4>
+            <p>Late delivery? Your order is on us.</p>
+          </div>
+        </div>
+        <div class="promise">
+          <span class="promise-icon"><svg class="ic i20" aria-hidden="true"><use href="#i-bike"/></svg></span>
+          <div>
+            <h4>Live rider tracking</h4>
+            <p>Know exactly where your food is at every moment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-promo" id="app">
+    <div class="wrap">
+      <div class="app-shell">
+        <span class="glow glow-a"></span>
+        <span class="glow glow-b"></span>
+
+        <div class="app-grid">
+          <div>
+            <p class="app-badge"><svg class="ic i14" aria-hidden="true"><use href="#i-phone"/></svg> iOS &amp; Android</p>
+            <h2>The whole city's kitchen, in your pocket.</h2>
+            <p class="app-copy">
+              Save your favourites, reorder in one tap and unlock app-only deals. Free delivery
+              on your first three orders.
+            </p>
+            <div class="store-row">
+              <button type="button" class="store-btn">
+                <small>Download on the</small>
+                <strong>App Store</strong>
+              </button>
+              <button type="button" class="store-btn">
+                <small>Get it on</small>
+                <strong>Google Play</strong>
+              </button>
+            </div>
+          </div>
+
+          <div class="phone">
+            <div class="frame">
+              <img src="src/assets/pk-prawns.jpg" alt="Mealio_Bite Bliss app preview" width="320" height="420" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="brand brand--center">
+        <span class="brand-name">Mealio<b>.</b></span>
+        <span class="brand-sub">Bite Bliss</span>
+      </a>
+      <p>
+        Pakistan's favourite halal kitchen — desi handi, charcoal BBQ, Karachi seafood and
+        fast food, delivered piping hot.
+      </p>
+      <a class="btn btn-md" href="https://wa.me/923001234567?text=Hi!%20I'd%20like%20to%20place%20an%20order%20from%20Mealio_Bite%20Bliss." target="_blank" rel="noopener noreferrer">
+        <svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>
+        Order on WhatsApp
+      </a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Discover</h4>
+      <ul>
+        <li><a href="#menu">Biryani</a></li>
+        <li><a href="#menu">Karahi &amp; Handi</a></li>
+        <li><a href="#menu">Karachi Seafood</a></li>
+        <li><a href="#menu">Fast Food</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#menu">About</a></li>
+        <li><a href="#menu">Careers</a></li>
+        <li><a href="#menu">Franchise</a></li>
+        <li><a href="#menu">Halal certification</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#menu">Support</a></li>
+        <li><a href="#menu">Partner with us</a></li>
+        <li><a href="#menu">Rider jobs</a></li>
+        <li><a href="#menu">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="inner">
+      <span>© <span id="year">2026</span> Mealio_Bite Bliss. All rights reserved.</span>
+      <span>Made with care for hungry people across Pakistan.</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-fab" href="https://wa.me/923001234567?text=Hi!%20I'd%20like%20to%20place%20an%20order%20from%20Mealio_Bite%20Bliss." target="_blank" rel="noopener noreferrer" aria-label="Order on WhatsApp">
+  <svg class="ic i20" aria-hidden="true"><use href="#i-chat"/></svg>
+  <span>Order on WhatsApp</span>
+</a>
+
+<div class="overlay" id="signin" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="signin-title">
+    <div class="modal-head">
+      <div>
+        <h3 id="signin-title">Sign in to Mealio_Bite Bliss</h3>
+        <p>Save your address &amp; reorder in one tap.</p>
+      </div>
+      <button type="button" class="modal-close" aria-label="Close">
+        <svg class="ic i20" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+    <form>
+      <input type="tel" placeholder="03xx xxxxxxx" aria-label="Phone number">
+      <input type="password" placeholder="Password" aria-label="Password">
+      <button type="submit" class="btn btn-block">Sign in</button>
+    </form>
+    <p class="modal-foot">
+      Or
+      <a href="https://wa.me/923001234567?text=Hi!%20I%20want%20to%20order%20from%20Mealio_Bite%20Bliss." target="_blank" rel="noopener noreferrer">order directly on WhatsApp</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  // Sign-in dialog — open from the header, close via backdrop, button or Escape.
+  var overlay = document.getElementById("signin");
+  var closeBtn = overlay.querySelector(".modal-close");
+  var firstInput = overlay.querySelector("input");
+
+  function openSignin() {
+    overlay.hidden = false;
+    document.body.classList.add("locked");
+    firstInput.focus();
+  }
+
+  function closeSignin() {
+    overlay.hidden = true;
+    document.body.classList.remove("locked");
+  }
+
+  document.querySelectorAll("[data-signin]").forEach(function (el) {
+    el.addEventListener("click", openSignin);
+  });
+  closeBtn.addEventListener("click", closeSignin);
+  overlay.addEventListener("click", function (e) {
+    if (e.target === overlay) closeSignin();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !overlay.hidden) closeSignin();
+  });
+
+  // The forms on this page are placeholders — don't let them navigate anywhere.
+  document.querySelectorAll("form").forEach(function (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+    });
+  });
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
