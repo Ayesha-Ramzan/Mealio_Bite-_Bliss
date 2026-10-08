@@ -1,6 +1,11 @@
-# Mealio_Bite Bliss 🍛
+# Mealio_Bite Bliss
 
 A halal Pakistani food & seafood delivery landing page — biryani, karahi, nihari, seekh kebab, Karachi seafood and fast food, delivered hot in 30 minutes.
+
+Demo:
+
+https://github.com/user-attachments/assets/347fdf1b-da34-463b-acd7-2d2d79ca575b
+
 
 The repository ships **two flavours of the same frontend**:
 
@@ -13,7 +18,7 @@ Both render the identical landing page and share the same images (`src/assets/`)
 
 ---
 
-## ✨ Features
+##  Features
 
 - **Cuisine categories** — Biryani, Karahi, BBQ & Kebab, Seafood, Fast Food, Mithai
 - **Featured restaurants** with ratings, delivery times and price ranges
@@ -23,7 +28,7 @@ Both render the identical landing page and share the same images (`src/assets/`)
 - **Sign-in dialog**, address search bar, live delivery stats, floating status cards
 - **Fully responsive** — mobile-first layout that scales up to desktop
 
-## 🧰 Tech stack
+##  Tech stack
 
 | Layer | Tools |
 |-------|-------|
@@ -34,7 +39,7 @@ Both render the identical landing page and share the same images (`src/assets/`)
 | Language | TypeScript |
 | Static page | Vanilla HTML / CSS / JS — no dependencies |
 
-## 📁 Project structure
+##  Project structure
 
 ```
 .
@@ -86,13 +91,10 @@ All ordering happens through WhatsApp. To point the site at your own restaurant 
 - **React app** — change `WA_NUMBER` at the top of `src/routes/index.tsx`
 - **Static page** — find & replace `923001234567` in `index.html`
 
-## 🌐 Deployment
+##  Deployment
 
 The React app builds to a Nitro output with Cloudflare as the default target (`bun run build`), so it deploys cleanly to Cloudflare Workers/Pages. For the quickest path to production, deploy the static `index.html` — it has zero runtime dependencies beyond the Google Fonts CDN.
 
-## 👥 Team
-
-Built by **Ayesha Ramzan** — Mealio_Bite Bliss.
 
 ---
 
